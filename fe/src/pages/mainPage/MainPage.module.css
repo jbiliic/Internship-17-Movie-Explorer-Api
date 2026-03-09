@@ -1,0 +1,45 @@
+/* Container for centering the landing page content */
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #6c5ce733 0%, #1a1a2e 100%);
+    text-align: center;
+}
+
+h1 {
+    font-size: 4rem;
+    color: white;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px #6c5ce7;
+}
+
+h2 {
+    color: #a29bfe;
+    font-weight: 300;
+    margin-bottom: 2rem;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Match your btn-primary style */
+.btn {
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #6c5ce7;
+    color: white;
+}
+
+.btn:hover {
+    background: #a29bfe;
+    transform: scale(1.05);
+}

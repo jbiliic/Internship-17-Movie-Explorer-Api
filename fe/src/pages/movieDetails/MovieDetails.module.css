@@ -1,0 +1,75 @@
+.container {
+    padding: 2rem;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+}
+
+.backBtn {
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 2rem;
+}
+
+.contentBox {
+    display: flex;
+    gap: 3rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.image {
+    width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.details {
+    flex: 1;
+}
+
+.header {
+    font-size: 2.5rem;
+    margin-top: 0;
+    color: #a29bfe;
+}
+
+.content {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #dfe6e9;
+    margin-bottom: 2rem;
+}
+
+.meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.metaItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #6c5ce7;
+    font-weight: bold;
+}
+
+.value {
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .contentBox { flex-direction: column; }
+    .image { width: 100%; }
+}

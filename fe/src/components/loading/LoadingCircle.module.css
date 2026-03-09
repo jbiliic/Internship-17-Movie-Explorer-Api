@@ -1,0 +1,26 @@
+/* LoadingCircle.module.css */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.spinner {
+  /* Constant Size */
+  width: 50px;
+  height: 50px;
+  
+  /* Constant Style */
+  border: 5px solid #e5e7eb; /* Light gray track */
+  border-top: 5px solid #3b82f6; /* Blue spinner */
+  border-radius: 50%;
+  
+  /* Animation */
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
