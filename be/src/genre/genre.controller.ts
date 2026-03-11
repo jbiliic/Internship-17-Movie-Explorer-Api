@@ -1,34 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { GenreService } from './genre.service';
-import { CreateGenreDto } from './dto/genreDTO';
-import { UpdateGenreDto } from './dto/update-genre.dto';
+import { Genre } from './entity/genre.entity';
+import { ApiOperation } from '@nestjs/swagger/dist/decorators/api-operation.decorator';
+import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
 
 @Controller('genre')
 export class GenreController {
-  constructor(private readonly genreService: GenreService) { }
+    constructor(private readonly genreService: GenreService) { }
 
-  @Post()
-  create(@Body() createGenreDto: CreateGenreDto) {
-    return this.genreService.create(createGenreDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.genreService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.genreService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGenreDto: UpdateGenreDto) {
-    return this.genreService.update(+id, updateGenreDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.genreService.remove(+id);
-  }
+    @Get()
+    @ApiOperation({ summary: 'Get all genres' })
+    @ApiOkResponse({
+        description: 'The list of genres has been successfully retrieved.',
+        type: Genre,
+        isArray: true
+    })
+    getGenres() {
+        return this.genreService.getGenres();
+    }
 }
