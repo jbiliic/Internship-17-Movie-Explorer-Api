@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMovieDto } from './dto/create-movie.dto';
+import { CreateMovieDto } from './dto/movieDTO';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Injectable()
