@@ -5,10 +5,10 @@ export interface MovieDTO {
     id: number;
     name: string;
     description: string;
-    releaseYear: number;
+    year: number;
     rating: number;
     length: string;
-    imgUrl: string;
+    imgURL: string;
 
     genres: GenreDTO[];
     favorite?: FavoriteDTO | null;

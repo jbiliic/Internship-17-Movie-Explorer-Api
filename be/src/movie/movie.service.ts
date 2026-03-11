@@ -1,13 +1,14 @@
 import { Get, Injectable, Query } from '@nestjs/common';
 import { MovieQueryFilterDTO } from './dto/movieQueryFIlterDTO';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { MovieDTO } from './dto/movieDTO';
 
 @Injectable()
 export class MovieService {
   constructor(private prisma: PrismaService) { }
 
-  getAllMovies(@Query() query: MovieQueryFilterDTO) {
-    return this.prisma.movie.findMany({
+  async getAllMovies(@Query() query: MovieQueryFilterDTO) {
+    return await this.prisma.movie.findMany({
       where: {
         name: {
           contains: query.search,
@@ -22,6 +23,6 @@ export class MovieService {
       orderBy: query.sortBy ? {
         [query.sortBy]: 'asc',
       } : undefined,
-    });
+    }) as MovieDTO[];
   }
 }

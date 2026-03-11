@@ -1,34 +1,29 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { FavoriteService } from './favorite.service';
-import { CreateFavoriteDto } from './dto/favoriteDTO';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { Movie } from 'src/movie/entity/movie.entity';
+import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
 @Controller('favorite')
 export class FavoriteController {
-  constructor(private readonly favoriteService: FavoriteService) { }
+	constructor(private readonly favoriteService: FavoriteService) { }
 
-  @Post()
-  create(@Body() createFavoriteDto: CreateFavoriteDto) {
-    return this.favoriteService.create(createFavoriteDto);
-  }
+	@Get()
+	@ApiOperation({ summary: 'Get all favorite movies' })
+	@ApiOkResponse({
+		description: 'The list of favorite movies has been successfully retrieved.',
+		type: Movie,
+		isArray: true
+	})
+	getFavorites() {
+		return this.favoriteService.getFavorites();
+	}
 
-  @Get()
-  findAll() {
-    return this.favoriteService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.favoriteService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFavoriteDto: UpdateFavoriteDto) {
-    return this.favoriteService.update(+id, updateFavoriteDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.favoriteService.remove(+id);
-  }
+	@Post('toggle/:movieId')
+	@ApiOperation({ summary: 'Toggle favorite status of a movie' })
+	@ApiOkResponse({
+		description: 'Favorite status toggled successfully.',
+	})
+	toggleFavorite(@Param('movieId') movieId: number) {
+		return this.favoriteService.toggleFavorite(movieId);
+	}
 }

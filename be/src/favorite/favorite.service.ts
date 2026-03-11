@@ -1,26 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFavoriteDto } from './dto/favoriteDTO';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { MovieDTO } from 'src/movie/dto/movieDTO';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class FavoriteService {
-  create(createFavoriteDto: CreateFavoriteDto) {
-    return 'This action adds a new favorite';
-  }
+    constructor(private prisma: PrismaService) { }
 
-  findAll() {
-    return `This action returns all favorite`;
-  }
+    async getFavorites() {
+        return await this.prisma.movie.findMany({
+            where: {
+                favorite: {
+                    isNot: null
+                }
+            },
+            include: {
+                genres: true
+            }
+        }) as MovieDTO[];
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favorite`;
-  }
+    async toggleFavorite(movieId: number) {
+        const existingFavorite = await this.prisma.favorite.findUnique({
+            where: {
+                movieId: movieId
+            }
+        });
 
-  update(id: number, updateFavoriteDto: UpdateFavoriteDto) {
-    return `This action updates a #${id} favorite`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} favorite`;
-  }
+        if (existingFavorite) {
+            await this.prisma.favorite.delete({
+                where: {
+                    id: existingFavorite.id
+                }
+            });
+            return { message: 'Movie removed from favorites' };
+        } else {
+            await this.prisma.favorite.create({
+                data: {
+                    movieId: movieId
+                }
+            });
+            return { message: 'Movie added to favorites' };
+        }
+    }
 }
