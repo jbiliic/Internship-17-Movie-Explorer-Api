@@ -19,7 +19,12 @@ export class FavoriteService {
         }) as MovieDTO[];
     }
 
-    async toggleFavorite(movieId: number) {
+    async toggleFavorite(Id: string) {
+        if (!Number.isInteger(Number(Id))) {
+            return { message: 'Invalid movie ID' };
+        }
+        const movieId = Number(Id);
+
         const existingFavorite = await this.prisma.favorite.findUnique({
             where: {
                 movieId: movieId

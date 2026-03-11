@@ -8,6 +8,7 @@ export class MovieService {
   constructor(private prisma: PrismaService) { }
 
   async getAllMovies(@Query() query: MovieQueryFilterDTO) {
+    console.log('entiy hit');
     return await this.prisma.movie.findMany({
       where: {
         name: {
