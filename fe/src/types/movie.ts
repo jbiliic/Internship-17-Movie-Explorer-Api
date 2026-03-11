@@ -9,4 +9,5 @@ export interface Movie {
     rating: number;
     year: number;
     imgURL: string;
+    isFavorite?: boolean;
 }

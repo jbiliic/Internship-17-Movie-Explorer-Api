@@ -1,26 +1,17 @@
 import LoadingCircle from "../../components/loading/LoadingCircle";
 import { MovieCard } from "../../components/movieCard/MovieCard";
-import { useLoadMovies } from "../../hooks/useLoadMovies"
 import type { Movie } from "../../types/movie";
 import { useNavigate } from "react-router-dom";
 import styles from './MoviePage.module.css';
 import { useFavorites } from "../../context/FavsContext";
 import { routes } from "../../constants/routes";
-import { useLoadFilteredMovies } from "../../hooks/useLoadFilterMovies";
 import { useEffect, useRef } from "react";
+
 export const MoviePage = () => {
-    const { movies, loading, error } = useLoadMovies();
     const { favorites, toggleFavorite } = useFavorites();
     const searchBarFocusRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
-    const {
-        searchQuery,
-        setSearchQuery,
-        filteredMovies,
-        isFiltering,
-        sortBy,
-        setSortBy
-    } = useLoadFilteredMovies(movies, favorites);
+
 
     useEffect(() => {
         if (!loading && !error) {

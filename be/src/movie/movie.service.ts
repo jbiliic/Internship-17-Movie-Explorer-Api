@@ -23,6 +23,10 @@ export class MovieService {
       orderBy: query.sortBy ? {
         [query.sortBy]: 'asc',
       } : undefined,
+      include: {
+        genres: true,
+        favorite: true,
+      },
     }) as MovieDTO[];
   }
 }

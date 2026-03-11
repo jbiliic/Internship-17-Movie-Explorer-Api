@@ -14,7 +14,8 @@ export class FavoriteService {
                 }
             },
             include: {
-                genres: true
+                genres: true,
+                favorite: true,
             }
         }) as MovieDTO[];
     }
