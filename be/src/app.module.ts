@@ -11,4 +11,4 @@ import { FavoriteModule } from './favorite/favorite.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
