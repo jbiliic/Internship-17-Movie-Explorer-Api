@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import styles from './MoviePage.module.css';
 import { useFavorites } from "../../context/FavsContext";
 import { routes } from "../../constants/routes";
-import { useFilteredMovies } from "../../hooks/useFilterMovies";
+import { useLoadFilteredMovies } from "../../hooks/useLoadFilterMovies";
 import { useEffect, useRef } from "react";
 export const MoviePage = () => {
     const { movies, loading, error } = useLoadMovies();
@@ -20,7 +20,7 @@ export const MoviePage = () => {
         isFiltering,
         sortBy,
         setSortBy
-    } = useFilteredMovies(movies, favorites);
+    } = useLoadFilteredMovies(movies, favorites);
 
     useEffect(() => {
         if (!loading && !error) {
