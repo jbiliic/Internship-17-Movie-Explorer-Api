@@ -1,26 +1,27 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMovieDto } from './dto/movieDTO';
-import { UpdateMovieDto } from './dto/update-movie.dto';
+import { Get, Injectable, Query } from '@nestjs/common';
+import { MovieQueryFilterDTO } from './dto/movieQueryFIlterDTO';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MovieService {
-  create(createMovieDto: CreateMovieDto) {
-    return 'This action adds a new movie';
-  }
+  constructor(private prisma: PrismaService) { }
 
-  findAll() {
-    return `This action returns all movie`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} movie`;
-  }
-
-  update(id: number, updateMovieDto: UpdateMovieDto) {
-    return `This action updates a #${id} movie`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} movie`;
+  getAllMovies(@Query() query: MovieQueryFilterDTO) {
+    return this.prisma.movie.findMany({
+      where: {
+        name: {
+          contains: query.search,
+          mode: 'insensitive',
+        },
+        genres: query.genre ? {
+          some: {
+            name: query.genre,
+          },
+        } : undefined,
+      },
+      orderBy: query.sortBy ? {
+        [query.sortBy]: 'asc',
+      } : undefined,
+    });
   }
 }
