@@ -11,7 +11,7 @@ export const useLoadGenres = () => {
         setGenresLoading(true);
         setGenresError(null);
 
-        const [res, err] = await client.get('/genres');
+        const [res, err] = await client.get('/genre');
 
         if (err) {
             setGenresError(err);

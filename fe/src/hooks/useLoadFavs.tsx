@@ -12,7 +12,7 @@ export const useLoadFavs = () => {
         setFavsError(null);
         setFavsLoading(true);
 
-        const [res, err] = await client.get('/favorites');
+        const [res, err] = await client.get('/favorite');
 
         if (err) {
             setFavsError(err);

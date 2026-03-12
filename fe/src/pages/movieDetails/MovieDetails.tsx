@@ -1,6 +1,4 @@
 import type { Movie } from '../../types/movie.ts';
-import { useParams } from 'react-router-dom';
-import LoadingCircle from '../../components/loading/LoadingCircle.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import styles from './MovieDetails.module.css';
@@ -8,7 +6,6 @@ import { routes } from '../../constants/routes.ts';
 import { useLocation } from 'react-router-dom';
 
 export const MovieDetails = () => {
-    const { id } = useParams<{ id: string }>();
     const [displayedMovie, setDisplayedMovie] = useState<Movie | null>(null);
 
     const navigate = useNavigate();

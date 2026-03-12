@@ -24,7 +24,7 @@ export const useLoadFilteredMovies = () => {
         setIsFiltering(true);
         setFilterError(null);
 
-        const [res, err] = await client.get('/movies', {
+        const [res, err] = await client.get('/movie', {
             params: {
                 search: debouncedSearch,
                 sort: sortBy,

@@ -1,0 +1,17 @@
+.selectFilter {
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  outline: none;
+}
+
+.selectFilter option {
+  background: var(--bg-color);
+  color: var(--text-main);
+}
