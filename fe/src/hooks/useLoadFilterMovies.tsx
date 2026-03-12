@@ -27,7 +27,7 @@ export const useLoadFilteredMovies = () => {
         const [res, err] = await client.get('/movie', {
             params: {
                 search: debouncedSearch,
-                sort: sortBy,
+                sortBy: sortBy,
                 genre: genreFilter
             }
         });

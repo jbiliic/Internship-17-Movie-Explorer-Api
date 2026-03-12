@@ -69,7 +69,7 @@ export const MoviePage = () => {
                             className={styles.sortSelect}
                         >
                             <option value="name">Imenu (A-Z)</option>
-                            <option value="releaseDate">Datumu izlaska</option>
+                            <option value="year">Datumu izlaska</option>
                             <option value="rating">Ocjeni</option>
                         </select>
                     </div>
