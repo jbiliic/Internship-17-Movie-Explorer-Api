@@ -7,20 +7,22 @@ export class FavoriteService {
     constructor(private prisma: PrismaService) { }
 
     async getFavorites() {
-        return await this.prisma.movie.findMany({
-            where: {
-                favorite: {
-                    isNot: null
-                }
-            },
+        const movies = await this.prisma.movie.findMany({
+            where: { favorite: { isNot: null } },
             include: {
                 genres: true,
                 favorite: true,
             }
-        }) as MovieDTO[];
+        });
+
+        return movies.map(movie => ({
+            ...movie,
+            isFavorite: !!movie.favorite
+        })) as MovieDTO[];
     }
 
     async toggleFavorite(Id: string) {
+        console.log("Toggling favorite for movie ID:", Id);
         if (!Number.isInteger(Number(Id))) {
             return { message: 'Invalid movie ID' };
         }

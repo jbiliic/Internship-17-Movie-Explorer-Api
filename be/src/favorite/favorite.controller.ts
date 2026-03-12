@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Param, Put } from '@nestjs/common';
 import { FavoriteService } from './favorite.service';
 import { Movie } from 'src/movie/entity/movie.entity';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
@@ -18,7 +18,7 @@ export class FavoriteController {
 		return this.favoriteService.getFavorites();
 	}
 
-	@Put('toggle/:movieId')
+	@Put('/toggle/:movieId')
 	@ApiOperation({ summary: 'Toggle favorite status of a movie' })
 	@ApiOkResponse({
 		description: 'Favorite status toggled successfully.',

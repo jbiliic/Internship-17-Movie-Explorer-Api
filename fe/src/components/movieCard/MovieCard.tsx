@@ -8,8 +8,10 @@ interface MovieCardProps {
     toggleFavourites?: (id: number) => void;
 }
 export const MovieCard = ({ movie, toggleFavourites }: MovieCardProps) => {
+
     const [addedToFavs, setAddedToFavs] = useState(movie.isFavorite || false);
     const navigate = useNavigate();
+
     const handleAddToFavourites = (e: React.MouseEvent) => {
         e.stopPropagation();
         setAddedToFavs(!addedToFavs);

@@ -24,6 +24,7 @@ export const MoviePage = () => {
     } = useLoadFilteredMovies();
     const searchBarFocusRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
+    const { toggleFav } = useToggleFavs();
 
 
     useEffect(() => {
@@ -32,14 +33,14 @@ export const MoviePage = () => {
         }
     }, [isFiltering, filterError]);
 
-    if (isFiltering) return <LoadingCircle />;
     if (filterError || genresError) return <div className="error">Error: {filterError || genresError}</div>;
 
     const toggleFavourites = (id: number) => {
         const movieToToggle = movies.find(m => m.id === id);
         if (movieToToggle) {
             movieToToggle.isFavorite = !movieToToggle.isFavorite;
-            useToggleFavs(id);
+            console.log("Calling hook now... with id ", id);
+            toggleFav(id);
         }
     }
 

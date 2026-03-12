@@ -3,7 +3,7 @@ import type { Movie } from "../types/movie";
 import client from "../api/client";
 
 export const useLoadFavs = () => {
-    let favs: Movie[] = [];
+    const [favs, setFavs] = useState<Movie[]>([]);
     const [favsError, setFavsError] = useState<string | null>(null);
     const [favsLoading, setFavsLoading] = useState<boolean>(false);
 
@@ -20,7 +20,7 @@ export const useLoadFavs = () => {
             return;
         }
 
-        favs = res;
+        setFavs(res);
         setFavsLoading(false);
     }
 
@@ -28,6 +28,6 @@ export const useLoadFavs = () => {
         fetchFavs();
     }, []);
 
-    return { favs, favsError, favsLoading };
+    return { favs, setFavs, favsError, favsLoading };
 
 };
