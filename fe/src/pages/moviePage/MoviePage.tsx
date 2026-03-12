@@ -3,29 +3,43 @@ import { MovieCard } from "../../components/movieCard/MovieCard";
 import type { Movie } from "../../types/movie";
 import { useNavigate } from "react-router-dom";
 import styles from './MoviePage.module.css';
-import { useFavorites } from "../../context/FavsContext";
 import { routes } from "../../constants/routes";
 import { useEffect, useRef } from "react";
+import { useLoadFilteredMovies } from "../../hooks/useLoadFilterMovies";
+import { useLoadGenres } from "../../hooks/useLoadGenres";
+import { useToggleFavs } from "../../hooks/useToggleFavs";
+import { FilteringBtn } from "../../components/filteringBtn/FilteringBtn";
 
 export const MoviePage = () => {
-    const { favorites, toggleFavorite } = useFavorites();
+    const { genres, genresError, genresLoading } = useLoadGenres();
+    const {
+        setSearchQuery,
+        isFiltering,
+        filterError,
+        searchQuery,
+        movies,
+        sortBy,
+        setSortBy,
+        setGenreFilter
+    } = useLoadFilteredMovies();
     const searchBarFocusRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
 
     useEffect(() => {
-        if (!loading && !error) {
+        if (!isFiltering && !filterError) {
             searchBarFocusRef.current?.focus();
         }
-    }, [loading, error]);
+    }, [isFiltering, filterError]);
 
-    if (loading) return <LoadingCircle />;
-    if (error) return <div className="error">Error: {error}</div>;
+    if (isFiltering) return <LoadingCircle />;
+    if (filterError || genresError) return <div className="error">Error: {filterError || genresError}</div>;
 
     const toggleFavourites = (id: number) => {
         const movieToToggle = movies.find(m => m.id === id);
         if (movieToToggle) {
-            toggleFavorite(movieToToggle);
+            movieToToggle.isFavorite = !movieToToggle.isFavorite;
+            useToggleFavs(id);
         }
     }
 
@@ -59,14 +73,21 @@ export const MoviePage = () => {
                         </select>
                     </div>
                 </div>
+                {genresLoading && <LoadingCircle />}
+                {!genresLoading && (
+                    <FilteringBtn
+                        onChange={setGenreFilter}
+                        options={genres.map(g => g.name) || []}
+                    />
+                )}
             </div>
             {isFiltering && <LoadingCircle />}
             {!isFiltering &&
                 <div className={styles.grid}>
-                    {filteredMovies.length === 0 ? (
+                    {movies.length === 0 ? (
                         <p className={styles.noMovies}>No movies found.</p>
                     ) : (
-                        filteredMovies.map((movie: Movie) => (
+                        movies.map((movie: Movie) => (
                             <MovieCard
                                 key={movie.id}
                                 movie={movie}

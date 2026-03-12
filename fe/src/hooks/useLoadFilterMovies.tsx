@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import type { Movie } from "../types/movie";
 import client from "../api/client";
@@ -20,7 +20,7 @@ export const useLoadFilteredMovies = () => {
         }
     }, [searchQuery, debouncedSearch]);
 
-    const loadMovies = useMemo(async () => {
+    const loadMovies = async () => {
         setIsFiltering(true);
         setFilterError(null);
 
@@ -42,13 +42,19 @@ export const useLoadFilteredMovies = () => {
         setMovies(res);
         setIsFiltering(false);
 
+    };
+
+    useEffect(() => {
+        loadMovies();
     }, [debouncedSearch, sortBy, genreFilter]);
 
     return {
         setSearchQuery,
+        searchQuery,
         isFiltering,
         filterError,
         movies,
+        sortBy,
         setSortBy,
         setGenreFilter
     };
