@@ -4,7 +4,7 @@ import { LoginDTO } from './dto/loginDTO';
 import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
 import { ApiOperation } from '@nestjs/swagger/dist/decorators/api-operation.decorator';
 import { User } from './entities/user.entity';
-import type { RegisterDTO } from './dto/registerDTO';
+import { RegisterDTO } from './dto/registerDTO';
 
 @Controller('user')
 export class UserController {

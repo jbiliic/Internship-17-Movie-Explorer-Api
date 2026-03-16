@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react"
 import client from "../../api/client"
 import { useNavigate } from "react-router-dom";
+import { routes } from "../../constants/routes";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -26,7 +27,7 @@ export const LoginPage = () => {
         if (res) {
             localStorage.setItem('access_token', res.access_token);
             alert('Login successful!');
-            navigate('/');
+            navigate(routes.MAIN);
         }
     }, [email, password]);
 

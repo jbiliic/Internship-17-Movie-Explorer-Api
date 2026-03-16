@@ -9,5 +9,6 @@ export const routes: Routes = {
     REGISTER: '/register',
     MOVIE_DETAILS: '/movies/:id',
     FAVOURITES: '/favourites',
+    ERROR: '/error',
     NO_PAGE_FOUND: '*'
 }

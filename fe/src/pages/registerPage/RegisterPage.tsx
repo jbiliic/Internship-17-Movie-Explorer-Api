@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import client from "../../api/client";
 import { useNavigate } from "react-router-dom";
+import { routes } from "../../constants/routes";
 
 export const RegisterPage = () => {
     const [email, setEmail] = useState('');
@@ -26,8 +27,9 @@ export const RegisterPage = () => {
         }
 
         if (res) {
-            alert('Registration successful! Please log in.');
-            navigate('/login');
+            alert('Registration successful!');
+            localStorage.setItem('access_token', res.access_token);
+            navigate(routes.MAIN);
         }
     }, [email, password, name]);
 
