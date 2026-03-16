@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -38,6 +39,35 @@ const moviesData = [
 async function main() {
     console.log('--- Start Seeding ---');
 
+    // 1. Kreiranje korisnika (Admin i Obični)
+    const adminPassword = await bcrypt.hash('admin123', 10);
+    const userPassword = await bcrypt.hash('user123', 10);
+
+    const adminUser = await prisma.user.upsert({
+        where: { email: 'admin@dump.hr' },
+        update: {},
+        create: {
+            email: 'admin@dump.hr',
+            name: 'Admin Korisnik',
+            password: adminPassword,
+            isAdmin: true,
+        },
+    });
+
+    const regularUser = await prisma.user.upsert({
+        where: { email: 'user@dump.hr' },
+        update: {},
+        create: {
+            email: 'user@dump.hr',
+            name: 'Obični Korisnik',
+            password: userPassword,
+            isAdmin: false,
+        },
+    });
+
+    console.log('Users seeded.');
+
+    // 2. Kreiranje filmova
     for (const movie of moviesData) {
         await prisma.movie.upsert({
             where: { id: movie.id },
@@ -50,7 +80,6 @@ async function main() {
                 rating: movie.rating,
                 year: movie.year,
                 imgURL: movie.imgURL,
-                // Relation: Genre (Many-to-Many)
                 genres: {
                     connectOrCreate: [
                         {
@@ -59,10 +88,12 @@ async function main() {
                         },
                     ],
                 },
-                // Relation: Favorite (One-to-One)
+                // Ako je isFavourite true, dodajemo ga adminu (primjerice)
                 ...(movie.isFavourite && {
-                    favorite: {
-                        create: {}
+                    favorites: {
+                        create: {
+                            userId: adminUser.id
+                        }
                     }
                 })
             },

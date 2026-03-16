@@ -13,7 +13,7 @@ export class Movie {
     description!: string;
 
     @ApiProperty({ example: 2010 })
-    releaseYear!: number;
+    year!: number;
 
     @ApiProperty({ example: 8.8 })
     rating!: number;
@@ -22,7 +22,7 @@ export class Movie {
     length!: string;
 
     @ApiProperty({ example: 'https://image.url/poster.jpg' })
-    imgUrl!: string;
+    imgURL!: string;
 
     @ApiProperty({ type: () => [Genre] })
     genres!: Genre[];

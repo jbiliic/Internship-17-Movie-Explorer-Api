@@ -14,16 +14,16 @@ datasource db {
 }
 
 model Movie {
-  id           Int        @id @default(autoincrement())
-  name         String
-  description  String
-  length       String
-  rating       Float
-  year         Int
-  imgURL       String
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  length      String
+  rating      Float
+  year        Int
+  imgURL      String
   
-  genres       Genre[]    @relation("MovieToGenre") 
-  favorite     Favorite?  
+  genres      Genre[]  @relation("MovieToGenre") 
+  favorites   Favorite[]
 }
 
 model Genre {
@@ -35,7 +35,22 @@ model Genre {
 
 model Favorite {
   id      Int   @id @default(autoincrement())
-  movieId Int   @unique
+  
+  movieId Int
+  userId  Int
 
   movie   Movie @relation(fields: [movieId], references: [id])
+  user    User  @relation(fields: [userId], references: [id])
+
+  @@unique([movieId, userId])
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String  
+  name     String 
+  isAdmin  Boolean
+  
+  favorites Favorite[]
 }

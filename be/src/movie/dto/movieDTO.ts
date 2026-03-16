@@ -11,5 +11,5 @@ export interface MovieDTO {
     imgURL: string;
 
     genres: GenreDTO[];
-    favorite?: FavoriteDTO | null;
+    favorites?: FavoriteDTO[];
 }
