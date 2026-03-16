@@ -6,31 +6,32 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class FavoriteService {
     constructor(private prisma: PrismaService) { }
 
-    async getFavorites() {
+    async getFavorites(userId: number) {
         const movies = await this.prisma.movie.findMany({
-            where: { favorite: { isNot: null } },
+            where: { favorites: { some: { userId } } },
             include: {
                 genres: true,
-                favorite: true,
+                favorites: true,
             }
         });
 
         return movies.map(movie => ({
             ...movie,
-            isFavorite: !!movie.favorite
+            isFavorite: movie.favorites.some(f => f.userId === userId)
         })) as MovieDTO[];
     }
 
-    async toggleFavorite(Id: string) {
+    async toggleFavorite(Id: string, userId: number) {
         console.log("Toggling favorite for movie ID:", Id);
         if (!Number.isInteger(Number(Id))) {
             return { message: 'Invalid movie ID' };
         }
         const movieId = Number(Id);
 
-        const existingFavorite = await this.prisma.favorite.findUnique({
+        const existingFavorite = await this.prisma.favorite.findFirst({
             where: {
-                movieId: movieId
+                movieId,
+                userId,
             }
         });
 
@@ -44,7 +45,8 @@ export class FavoriteService {
         } else {
             await this.prisma.favorite.create({
                 data: {
-                    movieId: movieId
+                    movieId,
+                    userId,
                 }
             });
             return { message: 'Movie added to favorites' };

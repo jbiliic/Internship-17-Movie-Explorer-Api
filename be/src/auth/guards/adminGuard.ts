@@ -10,6 +10,6 @@ export class AdminGuard implements CanActivate {
             return true;
         }
 
-        throw new ForbiddenException('Pristup odbijen: Potrebne su administratorske ovlasti.');
+        throw new ForbiddenException('Access denied: Admins only');
     }
 }

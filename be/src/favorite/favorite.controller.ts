@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Put } from '@nestjs/common';
+import { Controller, Get, Param, Put, Req, UseGuards } from '@nestjs/common';
 import { FavoriteService } from './favorite.service';
 import { Movie } from 'src/movie/entity/movie.entity';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { UserGuard } from 'src/auth/guards/userGuard';
 
 @Controller('favorite')
 export class FavoriteController {
@@ -14,8 +15,9 @@ export class FavoriteController {
 		type: Movie,
 		isArray: true
 	})
-	getFavorites() {
-		return this.favoriteService.getFavorites();
+	@UseGuards(UserGuard)
+	getFavorites(@Req() req: any) {
+		return this.favoriteService.getFavorites(req.user.userId as number);
 	}
 
 	@Put('/toggle/:movieId')
@@ -23,7 +25,8 @@ export class FavoriteController {
 	@ApiOkResponse({
 		description: 'Favorite status toggled successfully.',
 	})
-	toggleFavorite(@Param('movieId') movieId: string) {
-		return this.favoriteService.toggleFavorite(movieId);
+	@UseGuards(UserGuard)
+	toggleFavorite(@Param('movieId') movieId: string, @Req() req: any) {
+		return this.favoriteService.toggleFavorite(movieId, req.user.userId as number);
 	}
 }
