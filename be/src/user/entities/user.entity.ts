@@ -2,6 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsBoolean, IsNumber, IsString, MinLength } from 'class-validator';
 
 export class User {
+    @ApiProperty({ example: 1 })
+    id!: number;
+
     @ApiProperty({ example: 'user@example.com' })
     @IsEmail({}, { message: 'Must be a valid email address' })
     @IsNotEmpty()

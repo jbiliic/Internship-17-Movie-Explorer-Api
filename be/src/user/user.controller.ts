@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginDTO } from './dto/loginDTO';
+import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
+import { ApiOperation } from '@nestjs/swagger/dist/decorators/api-operation.decorator';
+import { User } from './entities/user.entity';
+import type { RegisterDTO } from './dto/registerDTO';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @Post('/login')
+  @ApiOperation({ summary: 'Login to the application' })
+  @ApiOkResponse({
+    description: 'The user has been successfully logged in.',
+    type: User,
+  })
+  login(@Body() userData: LoginDTO) {
+    return this.userService.login(userData);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @Post('/register')
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiOkResponse({
+    description: 'The user has been successfully registered.',
+    type: User,
+  })
+  register(@Body() userData: RegisterDTO) {
+    return this.userService.register(userData);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
 }
