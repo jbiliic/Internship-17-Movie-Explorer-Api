@@ -5,18 +5,23 @@ import { routes } from '../../constants/routes.ts';
 import styles from './MovieCard.module.css';
 interface MovieCardProps {
     movie: Movie;
-    toggleFavourites?: (id: number) => void;
+    toggleFavourites?: (id: number) => Promise<boolean>;
 }
 export const MovieCard = ({ movie, toggleFavourites }: MovieCardProps) => {
 
-    const [addedToFavs, setAddedToFavs] = useState(movie.isFavorite || false);
+    const [addedToFavs, setAddedToFavs] = useState(movie.isFavorite);
     const navigate = useNavigate();
 
-    const handleAddToFavourites = (e: React.MouseEvent) => {
+    const handleAddToFavourites = async (e: React.MouseEvent) => {
         e.stopPropagation();
-        setAddedToFavs(!addedToFavs);
-        if (toggleFavourites)
-            toggleFavourites(movie.id);
+        if (toggleFavourites) {
+            const response = await toggleFavourites(movie.id);
+            if (!response) {
+                alert("Failed to toggle favorite. Please try again.");
+            } else {
+                setAddedToFavs(prev => !prev);
+            }
+        }
     }
     return (
         <div className={styles.card} onClick={() => navigate(routes.MOVIE_DETAILS.replace(':id', movie.id.toString()), { state: { movie } })}>

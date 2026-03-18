@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Post, Body, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Post, Body, Delete, Put, UseGuards, Req } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { MovieQueryFilterDTO } from './dto/movieQueryFIlterDTO';
 import { ApiOperation } from '@nestjs/swagger/dist/decorators/api-operation.decorator';
@@ -7,6 +7,7 @@ import { Movie } from './entity/movie.entity';
 import { CreateMovieDto } from './dto/createMovieDTO';
 import { UserGuard } from 'src/auth/guards/userGuard';
 import { AdminGuard } from 'src/auth/guards/adminGuard';
+import { OptionalJwtAuthGuard } from 'src/auth/guards/optionalGuard';
 
 @Controller('movie')
 export class MovieController {
@@ -19,8 +20,10 @@ export class MovieController {
     type: Movie,
     isArray: true
   })
-  getAllMovies(@Query() query: MovieQueryFilterDTO) {
-    return this.movieService.getAllMovies(query);
+  @UseGuards(OptionalJwtAuthGuard)
+  getAllMovies(@Query() query: MovieQueryFilterDTO, @Req() req: any) {
+    console.log('User from Request:', req.user);
+    return this.movieService.getAllMovies(query, req.user ? (req.user.userId as number) : null);
   }
 
   @Post()

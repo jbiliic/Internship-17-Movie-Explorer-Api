@@ -7,6 +7,15 @@ export class FavoriteService {
     constructor(private prisma: PrismaService) { }
 
     async getFavorites(userId: number) {
+
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+        });
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
         const movies = await this.prisma.movie.findMany({
             where: { favorites: { some: { userId } } },
             include: {
@@ -21,16 +30,31 @@ export class FavoriteService {
         })) as MovieDTO[];
     }
 
-    async toggleFavorite(Id: string, userId: number) {
-        console.log("Toggling favorite for movie ID:", Id);
-        if (!Number.isInteger(Number(Id))) {
-            return { message: 'Invalid movie ID' };
+    async toggleFavorite(movieId: string, userId: number) {
+        const movieIdNum = parseInt(movieId, 10);
+        if (isNaN(movieIdNum)) {
+            throw new Error('Invalid movieId');
         }
-        const movieId = Number(Id);
+
+        const movie = await this.prisma.movie.findUnique({
+            where: { id: movieIdNum },
+        });
+
+        if (!movie) {
+            throw new Error('Movie not found');
+        }
+
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+        });
+
+        if (!user) {
+            throw new Error('User not found');
+        }
 
         const existingFavorite = await this.prisma.favorite.findFirst({
             where: {
-                movieId,
+                movieId: movieIdNum,
                 userId,
             }
         });
@@ -45,7 +69,7 @@ export class FavoriteService {
         } else {
             await this.prisma.favorite.create({
                 data: {
-                    movieId,
+                    movieId: movieIdNum,
                     userId,
                 }
             });

@@ -38,12 +38,8 @@ export const useLoadFilteredMovies = () => {
             setIsFiltering(false);
             return;
         }
-        const transformedMovies: Movie[] = res.map((movie: any) => ({
-            ...movie,
-            isFavorite: !!movie.favorite
-        }));
 
-        setMovies(transformedMovies);
+        setMovies(res);
         setIsFiltering(false);
 
     };

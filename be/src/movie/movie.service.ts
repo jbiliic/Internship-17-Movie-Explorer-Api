@@ -8,8 +8,8 @@ import { CreateMovieDto } from './dto/createMovieDTO';
 export class MovieService {
   constructor(private prisma: PrismaService) { }
 
-  async getAllMovies(query: MovieQueryFilterDTO) {
-    return await this.prisma.movie.findMany({
+  async getAllMovies(query: MovieQueryFilterDTO, userId: number | null) {
+    let movies = await this.prisma.movie.findMany({
       where: {
         name: {
           contains: query.search,
@@ -27,9 +27,22 @@ export class MovieService {
       include: {
         genres: true,
         favorites: true,
-      },
+      }
     }) as MovieDTO[];
+
+
+    movies = movies.map((movie) => ({
+      ...movie,
+      isFavorite: userId
+        ? movie.favorites?.some((f) => f.userId === userId)
+        : false,
+    })) as MovieDTO[];
+    console.log('Movies after mapping favorites:', movies);
+
+    return movies;
   }
+
+
 
   async createMovie(movieData: CreateMovieDto) {
     const { name, description, year, rating, genres, length, imgURL } = movieData;

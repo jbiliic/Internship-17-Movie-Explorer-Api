@@ -35,14 +35,20 @@ export const MoviePage = () => {
 
     if (filterError || genresError) return <div className="error">Error: {filterError || genresError}</div>;
 
-    const toggleFavourites = (id: number) => {
-        const movieToToggle = movies.find(m => m.id === id);
-        if (movieToToggle) {
-            movieToToggle.isFavorite = !movieToToggle.isFavorite;
-            console.log("Calling hook now... with id ", id);
-            toggleFav(id);
+    const toggleFavourites = async (id: number) => {
+        const response = await toggleFav(id);
+        if (!response) {
+            return false;
+        } else {
+            const updatedMovie = movies.find(m => m.id === id);
+            if (updatedMovie) {
+                updatedMovie.isFavorite = !updatedMovie.isFavorite;
+            }
+            return true;
+
         }
     }
+    console.log('Movies in MoviePage:', movies);
 
     return (
         <div className={styles.page}>
