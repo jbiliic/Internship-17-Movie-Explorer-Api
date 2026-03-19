@@ -2,3 +2,16 @@ node_modules/
 dist/
 build/
 coverage/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.idea/
+.vscode/
+.DS_Store
+*.log
+*.tsbuildinfo
+*.env
+.prettierrc
+DUMP-dom-17/

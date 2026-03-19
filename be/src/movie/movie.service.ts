@@ -41,31 +41,18 @@ export class MovieService {
     return movies;
   }
 
-
-
   async createMovie(movieData: CreateMovieDto) {
-    const { name, description, year, rating, genres, length, imgURL } = movieData;
-    const newMovie = await this.prisma.movie.create({
+    const { id, ...safeData } = movieData as any; // strip id if present
+
+    return await this.prisma.movie.create({
       data: {
-        name,
-        description,
-        year,
-        rating,
-        length,
-        imgURL,
+        ...safeData,
         genres: {
-          connectOrCreate: genres.map(genre => ({
-            where: { name: genre.name },
-            create: { name: genre.name },
-          })),
+          connect: safeData.genres.map((id: number) => ({ id })),
         },
       },
-      include: {
-        genres: true,
-      },
+      include: { genres: true },
     });
-
-    return newMovie as MovieDTO;
   }
 
   async deleteMovie(movieId: number) {
@@ -103,9 +90,7 @@ export class MovieService {
         length,
         imgURL,
         genres: {
-          set: genres.map(genre => ({
-            name: genre.name,
-          })),
+          set: genres.map((id: number) => ({ id })),
         },
       },
       include: {

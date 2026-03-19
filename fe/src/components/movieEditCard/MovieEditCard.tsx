@@ -10,26 +10,42 @@ interface MovieEditCardProps {
     onSubmit: (movieData: EditMovieDTO) => void;
 }
 
-export const MovieEditCard = ({ needsSelecting, title, onSubmit }: MovieEditCardProps) => {
+export const MovieEditCard = ({
+    needsSelecting,
+    title,
+    onSubmit,
+}: MovieEditCardProps) => {
     const { genres, genresError, genresLoading } = useLoadGenres();
 
-    const {
-        setSearchQuery,
-        isFiltering,
-        filterError,
-        searchQuery,
-        movies
-    } = useLoadFilteredMovies();
+    const { setSearchQuery, isFiltering, filterError, searchQuery, movies } =
+        useLoadFilteredMovies();
 
     const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const data = new FormData(e.currentTarget);
-        const formProps = Object.fromEntries(data);
+        const formData = new FormData(e.currentTarget);
 
-        onSubmit(formProps as unknown as EditMovieDTO);
-    }
+        const selectedGenres = formData
+            .getAll("genres")
+            .map((id) => Number(id));
 
-    if (genresError || filterError) return <div className="error">Error: {genresError || filterError}</div>;
+        const movieId = formData.get("movieId");
+
+        const moviePayload = {
+            id: movieId ? Number(movieId) : undefined, // 🔥 THIS FIXES EVERYTHING
+            name: String(formData.get("name")),
+            description: String(formData.get("description")),
+            length: String(formData.get("length")),
+            year: Number(formData.get("year")),
+            rating: Number(formData.get("rating")),
+            imgURL: String(formData.get("imgURL")),
+            genres: selectedGenres,
+        };
+
+        onSubmit(moviePayload as EditMovieDTO);
+    };
+
+    if (genresError || filterError)
+        return <div className="error">Error: {genresError || filterError}</div>;
     if (genresLoading) return <div>Loading...</div>;
 
     return (
@@ -46,8 +62,8 @@ export const MovieEditCard = ({ needsSelecting, title, onSubmit }: MovieEditCard
                         />
 
                         <select name="movieId" required>
-                            {!isFiltering && movies
-                                .map((m: Movie) => (
+                            {!isFiltering &&
+                                movies.map((m: Movie) => (
                                     <option key={m.id} value={m.id}>
                                         {m.name},{m.description},{m.year}
                                     </option>
@@ -56,22 +72,24 @@ export const MovieEditCard = ({ needsSelecting, title, onSubmit }: MovieEditCard
                     </>
                 )}
                 <input type="text" name="name" placeholder="Title" />
-                <input type="text" name="description" placeholder="Description" />
+                <input
+                    type="text"
+                    name="description"
+                    placeholder="Description"
+                />
                 <input type="text" name="length" placeholder="Duration" />
                 <input type="number" name="rating" placeholder="Rating" />
                 <input type="number" name="year" placeholder="Year" />
-                <select name="genreIds" multiple required>
+                <select name="genres" multiple required>
                     {genres.map((genre: Genre) => (
                         <option key={genre.id} value={genre.id}>
                             {genre.name}
                         </option>
                     ))}
                 </select>
-                <input type="text" name="imageURL" placeholder="Image URL" />
-                <button type="submit">
-                    Save Changes
-                </button>
+                <input type="text" name="imgURL" placeholder="Image URL" />
+                <button type="submit">Submit</button>
             </form>
         </div>
     );
-}
+};
