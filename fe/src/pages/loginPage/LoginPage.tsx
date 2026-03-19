@@ -1,41 +1,49 @@
-import { useCallback, useState } from "react"
-import client from "../../api/client"
+import { useCallback, useState } from "react";
+import client from "../../api/client";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../constants/routes";
+import styles from "./LoginPage.module.css";
 
 export const LoginPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
 
     const navigate = useNavigate();
 
-    const handleLogin = useCallback(async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
+    const handleLogin = useCallback(
+        async (e: React.FormEvent) => {
+            e.preventDefault();
+            setError(null);
 
-        const [res, err] = await client.post<{ access_token: string }>('/user/login', {
-            email,
-            password
-        });
+            const [res, err] = await client.post<{ access_token: string }>(
+                "/user/login",
+                {
+                    email,
+                    password,
+                },
+            );
 
-        if (err) {
-            setError(err);
-            return;
-        }
+            if (err) {
+                setError(err);
+                return;
+            }
 
-        if (res) {
-            localStorage.setItem('access_token', res.access_token);
-            alert('Login successful!');
-            navigate(routes.MAIN);
-        }
-    }, [email, password]);
+            if (res) {
+                localStorage.setItem("access_token", res.access_token);
+                alert("Login successful!");
+                navigate(routes.MAIN);
+            }
+        },
+        [email, password],
+    );
 
     return (
-        <div>
+        <div className={styles.page}>
             <h1>Login Page</h1>
-            <div className="login-container">
-                <form className="login-form" onSubmit={handleLogin}>
+            <button onClick={() => navigate(-1)}>Go Back</button>
+            <div className={styles.loginContainer}>
+                <form className={styles.loginForm} onSubmit={handleLogin}>
                     <label htmlFor="email">Email:</label>
                     <input
                         type="email"
@@ -54,11 +62,13 @@ export const LoginPage = () => {
                         required
                     />
 
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
+                    {error && <p style={{ color: "red" }}>{error}</p>}
 
-                    <button type="submit" className="submit-btn">Login</button>
+                    <button type="submit" className={styles.submitBtn}>
+                        Login
+                    </button>
                 </form>
             </div>
         </div>
-    )
-}
+    );
+};

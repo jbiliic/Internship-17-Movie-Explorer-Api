@@ -2,42 +2,47 @@ import { useCallback, useState } from "react";
 import client from "../../api/client";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../constants/routes";
+import styles from "./RegisterPage.module.css";
 
 export const RegisterPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
     const [error, setError] = useState<string | null>(null);
 
     const navigate = useNavigate();
 
-    const handleRegister = useCallback(async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
+    const handleRegister = useCallback(
+        async (e: React.FormEvent) => {
+            e.preventDefault();
+            setError(null);
 
-        const [res, err] = await client.post('/user/register', {
-            email,
-            password,
-            name
-        });
+            const [res, err] = await client.post("/user/register", {
+                email,
+                password,
+                name,
+            });
 
-        if (err) {
-            setError(err || 'Registration failed');
-            return;
-        }
+            if (err) {
+                setError(err || "Registration failed");
+                return;
+            }
 
-        if (res) {
-            alert('Registration successful!');
-            localStorage.setItem('access_token', res.access_token);
-            navigate(routes.MAIN);
-        }
-    }, [email, password, name]);
+            if (res) {
+                alert("Registration successful!");
+                localStorage.setItem("access_token", res.access_token);
+                navigate(routes.MAIN);
+            }
+        },
+        [email, password, name],
+    );
 
     return (
-        <div>
+        <div className={styles.container}>
             <h1>Register Page</h1>
-            <div className="register-container">
-                <form className="register-form" onSubmit={handleRegister}>
+            <button onClick={() => navigate(-1)}>Go Back</button>
+            <div className={styles.registerContainer}>
+                <form className={styles.registerForm} onSubmit={handleRegister}>
                     <label htmlFor="email">Email:</label>
                     <input
                         type="email"
@@ -62,10 +67,12 @@ export const RegisterPage = () => {
                         onChange={(e) => setName(e.target.value)}
                         required
                     />
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                    <button type="submit" className="submit-btn">Register</button>
+                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    <button type="submit" className={styles.submitBtn}>
+                        Register
+                    </button>
                 </form>
             </div>
         </div>
-    )
-}
+    );
+};

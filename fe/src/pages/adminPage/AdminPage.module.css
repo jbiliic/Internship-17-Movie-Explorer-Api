@@ -1,0 +1,104 @@
+.container {
+    padding: 3rem 2rem;
+    min-height: 100vh;
+    background-color: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+.backBtn {
+    align-self: flex-start;
+    background: transparent;
+    border: 1px solid #a29bfe;
+    color: #a29bfe;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.backBtn:hover {
+    background: rgba(162, 155, 254, 0.1);
+    box-shadow: 0 0 10px rgba(162, 155, 254, 0.2);
+}
+
+.cardWrapper {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cardWrapper h2 {
+    color: #a29bfe;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.deleteSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.input,
+.select {
+    background: #16213e;
+    border: 1px solid #6c5ce7;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.input:focus,
+.select:focus {
+    border-color: #a29bfe;
+}
+
+.deleteBtn {
+    background: #ff7675;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.deleteBtn:hover:not(:disabled) {
+    background: #d63031;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(214, 48, 49, 0.4);
+}
+
+.deleteBtn:disabled {
+    background: #636e72;
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem;
+    }
+
+    .cardWrapper {
+        padding: 1.5rem;
+    }
+}

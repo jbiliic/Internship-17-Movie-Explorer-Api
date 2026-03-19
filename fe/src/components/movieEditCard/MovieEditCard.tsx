@@ -3,6 +3,7 @@ import { useLoadGenres } from "../../hooks/useLoadGenres";
 import type { Genre } from "../../types/genre";
 import type { Movie } from "../../types/movie";
 import type { EditMovieDTO } from "../../types/editMovieDTO";
+import styles from "./MovieEditCard.module.css";
 
 interface MovieEditCardProps {
     needsSelecting: boolean;
@@ -49,9 +50,9 @@ export const MovieEditCard = ({
     if (genresLoading) return <div>Loading...</div>;
 
     return (
-        <div>
+        <div className={styles.card}>
             <h2>{title}</h2>
-            <form onSubmit={submitHandler}>
+            <form className={styles.form} onSubmit={submitHandler}>
                 {needsSelecting && (
                     <>
                         <input
@@ -59,9 +60,14 @@ export const MovieEditCard = ({
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Search..."
+                            className={styles.input}
                         />
 
-                        <select name="movieId" required>
+                        <select
+                            name="movieId"
+                            required
+                            className={styles.select}
+                        >
                             {!isFiltering &&
                                 movies.map((m: Movie) => (
                                     <option key={m.id} value={m.id}>
@@ -71,24 +77,57 @@ export const MovieEditCard = ({
                         </select>
                     </>
                 )}
-                <input type="text" name="name" placeholder="Title" />
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Title"
+                    className={styles.input}
+                />
                 <input
                     type="text"
                     name="description"
                     placeholder="Description"
+                    className={styles.input}
                 />
-                <input type="text" name="length" placeholder="Duration" />
-                <input type="number" name="rating" placeholder="Rating" />
-                <input type="number" name="year" placeholder="Year" />
-                <select name="genres" multiple required>
+                <input
+                    type="text"
+                    name="length"
+                    placeholder="Duration"
+                    className={styles.input}
+                />
+                <input
+                    type="decimal"
+                    name="rating"
+                    placeholder="Rating"
+                    className={styles.input}
+                />
+                <input
+                    type="number"
+                    name="year"
+                    placeholder="Year"
+                    className={styles.input}
+                />
+                <select
+                    name="genres"
+                    multiple
+                    required
+                    className={styles.select}
+                >
                     {genres.map((genre: Genre) => (
                         <option key={genre.id} value={genre.id}>
                             {genre.name}
                         </option>
                     ))}
                 </select>
-                <input type="text" name="imgURL" placeholder="Image URL" />
-                <button type="submit">Submit</button>
+                <input
+                    type="text"
+                    name="imgURL"
+                    placeholder="Image URL"
+                    className={styles.input}
+                />
+                <button type="submit" className={styles.submitBtn}>
+                    Submit
+                </button>
             </form>
         </div>
     );
