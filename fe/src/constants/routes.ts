@@ -10,6 +10,6 @@ export const routes: Routes = {
     MOVIE_DETAILS: '/movies/:id',
     FAVOURITES: '/favourites',
     ERROR: '/error',
-    ADMINBOARD: '/admin',
+    ADMIN: '/admin',
     NO_PAGE_FOUND: '*'
 }

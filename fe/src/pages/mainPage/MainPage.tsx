@@ -12,6 +12,7 @@ export const MainPage = () => {
                 <button onClick={() => navigate(routes.FAVOURITES)} className={styles.btn}>View Favourites</button>
                 <button onClick={() => navigate(routes.LOG_IN)} className={styles.btn}>Log In</button>
                 <button onClick={() => navigate(routes.REGISTER)} className={styles.btn}>Register</button>
+                <button onClick={() => navigate(routes.ADMIN)} className={styles.btn}>Admin</button>
             </div>
         </div>
     )

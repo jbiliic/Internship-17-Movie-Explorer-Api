@@ -13,13 +13,17 @@ export const FavsPage = () => {
 
     if (favsError) return <div className="error">Error: {favsError}</div>;
 
-    const toggleFavourites = (id: number) => {
-        const movieToToggle = favs.find(m => m.id === id);
-        if (movieToToggle) {
-            movieToToggle.isFavorite = !movieToToggle.isFavorite;
-            console.log("Calling hook now... with id ", id);
-            toggleFav(id);
-            setFavs(prevFavs => prevFavs.map(m => m.id === id ? { ...m, isFavorite: movieToToggle.isFavorite } : m));
+    const toggleFavourites = async (id: number) => {
+        const response = await toggleFav(id);
+        if (!response) {
+            return false;
+        } else {
+            const updatedMovie = favs.find(f => f.id === id);
+            if (updatedMovie) {
+                updatedMovie.isFavorite = !updatedMovie.isFavorite;
+            }
+            return true;
+
         }
     }
 

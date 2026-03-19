@@ -8,6 +8,7 @@ import { routes } from "./constants/routes";
 import { LoginPage } from './pages/loginPage/LoginPage.tsx';
 import { RegisterPage } from './pages/registerPage/RegisterPage.tsx';
 import { ErrorPage } from './pages/errorPage/ErrorPage.tsx';
+import { AdminPage } from './pages/adminPage/AdminPage.tsx';
 
 export const Router = () => {
     return (
@@ -20,6 +21,7 @@ export const Router = () => {
                 <Route path={routes.LOG_IN} element={<LoginPage />} />
                 <Route path={routes.REGISTER} element={<RegisterPage />} />
                 <Route path={routes.ERROR} element={<ErrorPage />} />
+                <Route path={routes.ADMIN} element={<AdminPage />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </BrowserRouter>

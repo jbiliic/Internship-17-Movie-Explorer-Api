@@ -37,7 +37,6 @@ export class MovieService {
         ? movie.favorites?.some((f) => f.userId === userId)
         : false,
     })) as MovieDTO[];
-    console.log('Movies after mapping favorites:', movies);
 
     return movies;
   }

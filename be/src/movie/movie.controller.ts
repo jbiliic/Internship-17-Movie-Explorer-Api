@@ -22,7 +22,6 @@ export class MovieController {
   })
   @UseGuards(OptionalJwtAuthGuard)
   getAllMovies(@Query() query: MovieQueryFilterDTO, @Req() req: any) {
-    console.log('User from Request:', req.user);
     return this.movieService.getAllMovies(query, req.user ? (req.user.userId as number) : null);
   }
 
@@ -34,6 +33,7 @@ export class MovieController {
   })
   @UseGuards(UserGuard, AdminGuard)
   createMovie(@Body() movieData: CreateMovieDto) {
+    console.log('Received movie data:', movieData); // Debug log
     return this.movieService.createMovie(movieData);
   }
 
