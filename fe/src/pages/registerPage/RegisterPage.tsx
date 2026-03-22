@@ -29,47 +29,65 @@ export const RegisterPage = () => {
             }
 
             if (res) {
-                alert("Registration successful!");
                 localStorage.setItem("access_token", res.access_token);
                 navigate(routes.MAIN);
             }
         },
-        [email, password, name],
+        [email, password, name, navigate],
     );
 
     return (
-        <div className={styles.container}>
-            <h1>Register Page</h1>
-            <button onClick={() => navigate(-1)}>Go Back</button>
+        <div className={styles.page}>
+            <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                ← Go Back
+            </button>
+
             <div className={styles.registerContainer}>
+                <header className={styles.header}>
+                    <h1>Create Account</h1>
+                </header>
+
                 <form className={styles.registerForm} onSubmit={handleRegister}>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <label htmlFor="name">Name:</label>
-                    <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="name">Full Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="John Doe"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="name@example.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="••••••••"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    {error && <div className={styles.errorBox}>{error}</div>}
+
                     <button type="submit" className={styles.submitBtn}>
-                        Register
+                        Register Now
                     </button>
                 </form>
             </div>

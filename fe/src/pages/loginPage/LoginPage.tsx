@@ -8,7 +8,6 @@ export const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
-
     const navigate = useNavigate();
 
     const handleLogin = useCallback(
@@ -16,13 +15,10 @@ export const LoginPage = () => {
             e.preventDefault();
             setError(null);
 
-            const [res, err] = await client.post<{ access_token: string }>(
-                "/user/login",
-                {
-                    email,
-                    password,
-                },
-            );
+            const [res, err] = await client.post("/user/login", {
+                email,
+                password,
+            });
 
             if (err) {
                 setError(err);
@@ -31,41 +27,52 @@ export const LoginPage = () => {
 
             if (res) {
                 localStorage.setItem("access_token", res.access_token);
-                alert("Login successful!");
                 navigate(routes.MAIN);
             }
         },
-        [email, password],
+        [email, password, navigate],
     );
 
     return (
         <div className={styles.page}>
-            <h1>Login Page</h1>
-            <button onClick={() => navigate(-1)}>Go Back</button>
+            <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                ← Go Back
+            </button>
+
             <div className={styles.loginContainer}>
+                <header className={styles.header}>
+                    <h1>Login</h1>
+                </header>
+
                 <form className={styles.loginForm} onSubmit={handleLogin}>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="name@company.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
 
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
+                    <div className={styles.inputGroup}>
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="••••••••"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
 
-                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    {error && <div className={styles.errorBox}>{error}</div>}
 
                     <button type="submit" className={styles.submitBtn}>
-                        Login
+                        Sign In
                     </button>
                 </form>
             </div>
