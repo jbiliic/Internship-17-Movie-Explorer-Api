@@ -1,9 +1,9 @@
-import type { Movie } from '../../types/movie.ts';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import styles from './MovieDetails.module.css';
-import { routes } from '../../constants/routes.ts';
-import { useLocation } from 'react-router-dom';
+import type { Movie } from "../../types/movie.ts";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import styles from "./MovieDetails.module.css";
+import { routes } from "../../constants/routes.ts";
+import { useLocation } from "react-router-dom";
 
 export const MovieDetails = () => {
     const [displayedMovie, setDisplayedMovie] = useState<Movie | null>(null);
@@ -37,26 +37,36 @@ export const MovieDetails = () => {
                     </div>
                     <div className={styles.details}>
                         <h1 className={styles.header}>{displayedMovie.name}</h1>
-                        <p className={styles.content}>{displayedMovie.description}</p>
+                        <p className={styles.content}>
+                            {displayedMovie.description}
+                        </p>
 
                         <div className={styles.meta}>
                             <div className={styles.metaItem}>
                                 <span className={styles.label}>Rating</span>
-                                <span className={styles.value}>{displayedMovie.rating}</span>
+                                <span className={styles.value}>
+                                    {displayedMovie.rating}
+                                </span>
                             </div>
                             <div className={styles.metaItem}>
                                 <span className={styles.label}>Year</span>
-                                <span className={styles.value}>{displayedMovie.year}</span>
+                                <span className={styles.value}>
+                                    {displayedMovie.year}
+                                </span>
                             </div>
                             <div className={styles.metaItem}>
                                 <span className={styles.label}>Genres</span>
-                                {displayedMovie.genres.map(g => (
-                                    <span key={g.id} className={styles.genre}>{g.name}</span>
+                                {displayedMovie.genres.map((g) => (
+                                    <span key={g.id} className={styles.genre}>
+                                        {g.name}
+                                    </span>
                                 ))}
                             </div>
                             <div className={styles.metaItem}>
                                 <span className={styles.label}>Length</span>
-                                <span className={styles.value}>{displayedMovie.length}</span>
+                                <span className={styles.value}>
+                                    {displayedMovie.length}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -64,4 +74,4 @@ export const MovieDetails = () => {
             )}
         </div>
     );
-}
+};

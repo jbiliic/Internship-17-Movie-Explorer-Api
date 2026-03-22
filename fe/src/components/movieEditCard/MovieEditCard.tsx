@@ -4,6 +4,9 @@ import type { Genre } from "../../types/genre";
 import type { Movie } from "../../types/movie";
 import type { EditMovieDTO } from "../../types/editMovieDTO";
 import styles from "./MovieEditCard.module.css";
+import { Navigate } from "react-router-dom";
+import { routes } from "../../constants/routes";
+import LoadingCircle from "../loading/LoadingCircle";
 
 interface MovieEditCardProps {
     needsSelecting: boolean;
@@ -46,8 +49,13 @@ export const MovieEditCard = ({
     };
 
     if (genresError || filterError)
-        return <div className="error">Error: {genresError || filterError}</div>;
-    if (genresLoading) return <div>Loading...</div>;
+        return (
+            <Navigate
+                to={routes.ERROR}
+                state={{ error: genresError || filterError }}
+            />
+        );
+    if (genresLoading) return <LoadingCircle></LoadingCircle>;
 
     return (
         <div className={styles.card}>

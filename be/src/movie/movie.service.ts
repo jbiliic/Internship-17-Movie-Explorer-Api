@@ -42,7 +42,7 @@ export class MovieService {
     }
 
     async createMovie(movieData: CreateMovieDto) {
-        const { id, ...safeData } = movieData as any; // strip id if present
+        const { id, ...safeData } = movieData as any;
 
         return await this.prisma.movie.create({
             data: {

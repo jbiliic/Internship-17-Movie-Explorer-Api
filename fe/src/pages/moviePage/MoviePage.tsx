@@ -1,8 +1,8 @@
 import LoadingCircle from "../../components/loading/LoadingCircle";
 import { MovieCard } from "../../components/movieCard/MovieCard";
 import type { Movie } from "../../types/movie";
-import { useNavigate } from "react-router-dom";
-import styles from './MoviePage.module.css';
+import { Navigate, useNavigate } from "react-router-dom";
+import styles from "./MoviePage.module.css";
 import { routes } from "../../constants/routes";
 import { useEffect, useRef } from "react";
 import { useLoadFilteredMovies } from "../../hooks/useLoadFilterMovies";
@@ -20,12 +20,11 @@ export const MoviePage = () => {
         movies,
         sortBy,
         setSortBy,
-        setGenreFilter
+        setGenreFilter,
     } = useLoadFilteredMovies();
     const searchBarFocusRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const { toggleFav } = useToggleFavs();
-
 
     useEffect(() => {
         if (!isFiltering && !filterError) {
@@ -33,26 +32,30 @@ export const MoviePage = () => {
         }
     }, [isFiltering, filterError]);
 
-    if (filterError || genresError) return <div className="error">Error: {filterError || genresError}</div>;
+    if (filterError || genresError)
+        return (
+            <Navigate to={routes.ERROR} state={filterError || genresError} />
+        );
 
     const toggleFavourites = async (id: number) => {
         const response = await toggleFav(id);
         if (!response) {
             return false;
         } else {
-            const updatedMovie = movies.find(m => m.id === id);
+            const updatedMovie = movies.find((m) => m.id === id);
             if (updatedMovie) {
                 updatedMovie.isFavorite = !updatedMovie.isFavorite;
             }
             return true;
-
         }
-    }
-    console.log('Movies in MoviePage:', movies);
+    };
 
     return (
         <div className={styles.page}>
-            <button className={styles.backBtn} onClick={() => navigate(routes.MAIN)}>
+            <button
+                className={styles.backBtn}
+                onClick={() => navigate(routes.MAIN)}
+            >
                 Back
             </button>
             <div>
@@ -65,7 +68,10 @@ export const MoviePage = () => {
                         placeholder="Search..."
                     />
                     <div className={styles.sortContainer}>
-                        <label htmlFor="movie-sort" className={styles.sortLabel}>
+                        <label
+                            htmlFor="movie-sort"
+                            className={styles.sortLabel}
+                        >
                             Sortiraj po:
                         </label>
                         <select
@@ -84,12 +90,12 @@ export const MoviePage = () => {
                 {!genresLoading && (
                     <FilteringBtn
                         onChange={setGenreFilter}
-                        options={genres.map(g => g.name) || []}
+                        options={genres.map((g) => g.name) || []}
                     />
                 )}
             </div>
             {isFiltering && <LoadingCircle />}
-            {!isFiltering &&
+            {!isFiltering && (
                 <div className={styles.grid}>
                     {movies.length === 0 ? (
                         <p className={styles.noMovies}>No movies found.</p>
@@ -100,8 +106,10 @@ export const MoviePage = () => {
                                 movie={movie}
                                 toggleFavourites={toggleFavourites}
                             />
-                        )))}
-                </div>}
+                        ))
+                    )}
+                </div>
+            )}
         </div>
     );
-}
+};

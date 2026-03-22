@@ -2,13 +2,15 @@ import { useState } from "react";
 import { MovieEditCard } from "../../components/movieEditCard/MovieEditCard";
 import { submitMovie } from "../../api/submitMovie";
 import styles from "./AdminPage.module.css";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import type { Movie } from "../../types/movie";
 import { useLoadFilteredMovies } from "../../hooks/useLoadFilterMovies";
-import { deleteMovie } from "../../api/deleteMovie";
+import { routes } from "../../constants/routes";
+import { useDeleteMovie } from "../../hooks/useDeleteMovie";
 
 export const AdminPage = () => {
     const [selectedDeleteId, setSelectedDeleteId] = useState<string>("");
+    const deleteMovie = useDeleteMovie();
 
     const { setSearchQuery, isFiltering, filterError, searchQuery, movies } =
         useLoadFilteredMovies();
@@ -33,10 +35,20 @@ export const AdminPage = () => {
                 setSelectedDeleteId("");
                 window.location.reload();
             } else {
-                alert("Failed to delete movie.");
+                return (
+                    <Navigate
+                        to={routes.ERROR}
+                        state={{
+                            error: "Failed to delete movie. Try updating your credentials.",
+                        }}
+                    />
+                );
             }
         }
     };
+
+    if (filterError)
+        return <Navigate to={routes.ERROR} state={{ error: filterError }} />;
 
     return (
         <div className={styles.container}>
