@@ -1,20 +1,19 @@
 import { useState } from "react";
 import { MovieEditCard } from "../../components/movieEditCard/MovieEditCard";
-import { submitMovie } from "../../api/submitMovie";
 import styles from "./AdminPage.module.css";
 import { Navigate, useNavigate } from "react-router-dom";
 import type { Movie } from "../../types/movie";
 import { useLoadFilteredMovies } from "../../hooks/useLoadFilterMovies";
 import { routes } from "../../constants/routes";
 import { useDeleteMovie } from "../../hooks/useDeleteMovie";
+import { useSubmitMovie } from "../../hooks/useSubmitMovie";
 
 export const AdminPage = () => {
     const [selectedDeleteId, setSelectedDeleteId] = useState<string>("");
     const deleteMovie = useDeleteMovie();
-
+    const submitMovie = useSubmitMovie();
     const { setSearchQuery, isFiltering, filterError, searchQuery, movies } =
         useLoadFilteredMovies();
-
     const navigate = useNavigate();
 
     const handleDelete = async () => {
@@ -35,14 +34,11 @@ export const AdminPage = () => {
                 setSelectedDeleteId("");
                 window.location.reload();
             } else {
-                return (
-                    <Navigate
-                        to={routes.ERROR}
-                        state={{
-                            error: "Failed to delete movie. Try updating your credentials.",
-                        }}
-                    />
-                );
+                navigate(routes.ERROR, {
+                    state: {
+                        error: "Failed to delete movie. Try updating your credentials.",
+                    },
+                });
             }
         }
     };
@@ -52,63 +48,74 @@ export const AdminPage = () => {
 
     return (
         <div className={styles.container}>
-            <button className={styles.backBtn} onClick={() => navigate(-1)}>
-                Go Back
-            </button>
+            <div className={styles.contentColumn}>
+                <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                    ← Go Back
+                </button>
 
-            <div className={styles.cardWrapper}>
-                <MovieEditCard
-                    needsSelecting={false}
-                    title="Add Movie"
-                    onSubmit={submitMovie}
-                />
-            </div>
+                <header className={styles.header}>
+                    <h1>Admin Dashboard</h1>
+                    <p>Manage your movie database from one place.</p>
+                </header>
 
-            <div className={styles.cardWrapper}>
-                <MovieEditCard
-                    needsSelecting={true}
-                    title="Edit Movie"
-                    onSubmit={submitMovie}
-                />
-            </div>
-
-            <div className={styles.cardWrapper}>
-                <h2>Delete Movie</h2>
-                <div className={styles.deleteSection}>
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search for movie to delete..."
-                        className={styles.input}
+                <section className={styles.cardWrapper}>
+                    <MovieEditCard
+                        needsSelecting={false}
+                        title="Add New Movie"
+                        onSubmit={submitMovie}
                     />
-                    <select
-                        name="movieId"
-                        required
-                        className={styles.select}
-                        value={selectedDeleteId}
-                        onChange={(e) => setSelectedDeleteId(e.target.value)}
-                    >
-                        <option value="">-- Select a movie to delete --</option>
-                        {movies.length === 0 && !isFiltering && (
-                            <option value="">No movies found</option>
-                        )}
-                        {movies.map((m: Movie) => (
-                            <option key={m.id} value={m.id}>
-                                {m.name} ({m.year})
-                            </option>
-                        ))}
-                    </select>
+                </section>
 
-                    <button
-                        type="button"
-                        className={styles.deleteBtn}
-                        onClick={handleDelete}
-                        disabled={!selectedDeleteId}
-                    >
-                        Delete Movie
-                    </button>
-                </div>
+                <section className={styles.cardWrapper}>
+                    <MovieEditCard
+                        needsSelecting={true}
+                        title="Edit Existing Movie"
+                        onSubmit={submitMovie}
+                    />
+                </section>
+
+                <section className={styles.cardWrapper}>
+                    <h2>Delete Movie</h2>
+                    <div className={styles.deleteSection}>
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search for movie to delete..."
+                            className={styles.input}
+                        />
+                        <select
+                            name="movieId"
+                            required
+                            className={styles.select}
+                            value={selectedDeleteId}
+                            onChange={(e) =>
+                                setSelectedDeleteId(e.target.value)
+                            }
+                        >
+                            <option value="">
+                                -- Select a movie to delete --
+                            </option>
+                            {movies.length === 0 && !isFiltering && (
+                                <option value="">No movies found</option>
+                            )}
+                            {movies.map((m: Movie) => (
+                                <option key={m.id} value={m.id}>
+                                    {m.name} ({m.year})
+                                </option>
+                            ))}
+                        </select>
+
+                        <button
+                            type="button"
+                            className={styles.deleteBtn}
+                            onClick={handleDelete}
+                            disabled={!selectedDeleteId}
+                        >
+                            Delete Movie
+                        </button>
+                    </div>
+                </section>
             </div>
         </div>
     );

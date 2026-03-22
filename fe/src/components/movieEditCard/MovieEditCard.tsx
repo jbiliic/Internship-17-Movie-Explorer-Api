@@ -11,7 +11,7 @@ import LoadingCircle from "../loading/LoadingCircle";
 interface MovieEditCardProps {
     needsSelecting: boolean;
     title: string;
-    onSubmit: (movieData: EditMovieDTO) => void;
+    onSubmit: (movieData: EditMovieDTO) => Promise<unknown>;
 }
 
 export const MovieEditCard = ({
@@ -24,7 +24,7 @@ export const MovieEditCard = ({
     const { setSearchQuery, isFiltering, filterError, searchQuery, movies } =
         useLoadFilteredMovies();
 
-    const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
 
@@ -35,7 +35,7 @@ export const MovieEditCard = ({
         const movieId = formData.get("movieId");
 
         const moviePayload = {
-            id: movieId ? Number(movieId) : undefined, // 🔥 THIS FIXES EVERYTHING
+            id: movieId ? Number(movieId) : undefined,
             name: String(formData.get("name")),
             description: String(formData.get("description")),
             length: String(formData.get("length")),
@@ -45,7 +45,11 @@ export const MovieEditCard = ({
             genres: selectedGenres,
         };
 
-        onSubmit(moviePayload as EditMovieDTO);
+        const res = await onSubmit(moviePayload as EditMovieDTO);
+        if (res) {
+            alert("Movie submitted successfully!");
+            e.currentTarget.reset();
+        }
     };
 
     if (genresError || filterError)
@@ -121,6 +125,7 @@ export const MovieEditCard = ({
                     required
                     className={styles.select}
                 >
+                    {<option value="">Select</option>}
                     {genres.map((genre: Genre) => (
                         <option key={genre.id} value={genre.id}>
                             {genre.name}
